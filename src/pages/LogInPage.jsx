@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const LogInPage = () => {
   const [email, setEmail] = useState("");
@@ -8,6 +9,10 @@ const LogInPage = () => {
     e.preventDefault();
     console.log("Email:", email);
     console.log("Password:", password);
+    toast.success("Login successful");
+
+    setEmail("");
+    setPassword("");
   };
 
   return (
