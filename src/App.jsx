@@ -5,11 +5,13 @@ import viteLogo from "/vite.svg";
 import SongCard from "./components/SongList";
 import Library from "./pages/Library";
 import NavBar from "./components/NavBar";
+import LogInPage from "./pages/LogInPage";
 
 function App() {
   return (
     <>
-      <Library />
+      {/* <Library /> */}
+      <LogInPage />
     </>
   );
 }
