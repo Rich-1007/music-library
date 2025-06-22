@@ -3,13 +3,14 @@ import { songs } from "../data/data";
 import { MdDeleteForever } from "react-icons/md";
 import AddSongModal from "../components/AddSongModal";
 import { songListReducer } from "../reducers/songListReducer";
+import { toast } from "react-toastify";
 
 const Library = () => {
   const [updateSong, dispatch] = useReducer(songListReducer, songs);
 
   const [userRole, setUserRole] = useState("admin");
 
-  const [groupByValue, setGroupByValue] = useState("");
+  // const [groupByValue, setGroupByValue] = useState("");
   const [sortByValue, setSortByValue] = useState("");
 
   const [groupField, setGroupField] = useState();
@@ -57,6 +58,8 @@ const Library = () => {
     );
     setSelectedFilters(selected);
     setIsTrue(false);
+
+    setGroupField("");
   };
 
   function durationConverter(dur) {
@@ -68,6 +71,10 @@ const Library = () => {
   function HandleGroupBy(e) {
     setGroupField(e);
     setSortByValue("");
+
+    setSelectedFilters([]);
+    setCheckedItems({});
+    setIsTrue(false);
   }
 
   function groupSongsByAlbum() {
@@ -117,7 +124,7 @@ const Library = () => {
 
   function HandleSortBy(e) {
     setGroupField("");
-    setGroupByValue("");
+    // setGroupByValue("");
 
     if (e == "Year") {
       setAllSongs(sortSongsByYearDescending(songs));
@@ -130,6 +137,8 @@ const Library = () => {
     } else if (e == "Z-A") {
       setAllSongs(sortSongsByTitleZA(songs));
     }
+
+    toast.info(`Sorted by ${e}`);
   }
 
   useEffect(() => {
@@ -138,11 +147,13 @@ const Library = () => {
     if (groupField == "Artist") {
       const groupedByArtist = groupSongsByArtist();
       setGroupByData(groupedByArtist);
+      toast.info("Grouped by Artist");
 
       console.log(groupedByArtist);
     } else if (groupField == "Album") {
       const groupedByAlbum = groupSongsByAlbum();
       setGroupByData(groupedByAlbum);
+      toast.info("Grouped by Album");
     }
   }, [groupField]);
 
@@ -174,8 +185,10 @@ const Library = () => {
     setGroupField("");
     setGroupByData(null);
     setAllSongs(songs);
-    setGroupByValue("");
+    // setGroupByValue("");
     setSortByValue("");
+
+    toast.info("All filter cleared");
   };
   function handleAddSong() {
     setIsOpen((prev) => !prev);
@@ -192,6 +205,7 @@ const Library = () => {
       type: "REMOVE_SONG",
       payload: { title },
     });
+    toast.warn("Song removed successfully");
   }
 
   return (
@@ -224,9 +238,9 @@ const Library = () => {
               Group By
             </label>
             <select
-              value={groupByValue}
+              value={groupField}
               onChange={(e) => {
-                setGroupByValue(e.target.value);
+                // setGroupByValue(e.target.value);
                 HandleGroupBy(e.target.value);
               }}
               className="px-3 py-2 rounded-md bg-[#2a2a2a] text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -282,6 +296,7 @@ const Library = () => {
               )}
             </div>
           </div>
+
           <button
             onClick={handleClearAll}
             className="text-xs bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 transition h-fit cursor-pointer"
@@ -313,12 +328,12 @@ const Library = () => {
             <span className="text-[#fff] font-bold">
               Grouped By {groupField}
             </span>
-            <div className="w-full bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  sm:px-7">
+            <div className="w-full bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  sm:px-7 pt-2">
               <div>
                 {groupByData &&
                   Object.entries(groupByData)?.map(([albumName, songs]) => (
                     <>
-                      <span>{albumName}</span>
+                      <span className="text-gray-500 text-sm">{albumName}</span>
 
                       <div className="pb-8">
                         <table className="w-full text-left text-sm text-gray-300 border-collapse">
@@ -328,6 +343,7 @@ const Library = () => {
                               <th className="p-2 w-16">Image</th>
                               <th className="p-2 w-64">Title</th>
                               <th className="p-2 w-48">Artist</th>
+
                               <th className="p-2 w-32">Duration</th>
                             </tr>
                           </thead>
@@ -363,7 +379,7 @@ const Library = () => {
             </div>
           </div>
         ) : (
-          <div className="w-screen md:w-4/6 bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  md:px-7 py-3">
+          <div className="overflow-x-auto  w-screen md:w-4/6 bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  md:px-7 py-3">
             <table className="   w-full text-left text-sm text-gray-300 border-collapse">
               <thead className="border-b border-gray-500 text-gray-400 text-[10px] sm:text-lg">
                 <tr>
@@ -371,6 +387,7 @@ const Library = () => {
                   <th className="p-2">Image</th>
                   <th className="p-2">Title</th>
                   <th className="p-2">Artist</th>
+                  <th className="p-2">Album</th>
                   <th className="p-2">Duration</th>
 
                   {userRole == "admin" && filteredItems?.length == 0 ? (
@@ -400,6 +417,7 @@ const Library = () => {
                           </p>
                         </td>
                         <td className="p-2">{item.artist}</td>
+                        <td className="p-2">{item.album}</td>
                         <td className="p-2">
                           {durationConverter(item.duration)}
                         </td>
@@ -425,6 +443,7 @@ const Library = () => {
                           </p>
                         </td>
                         <td className="p-2">{item.artist}</td>
+                        <td className="p-2">{item.album}</td>
                         <td className="p-2">
                           {durationConverter(item.duration)}
                         </td>

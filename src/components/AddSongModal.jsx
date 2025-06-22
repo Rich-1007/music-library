@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
+import { toast } from "react-toastify";
 
 const AddSongModal = ({ isOpen, setIsOpen, updateSong, dispatch }) => {
   const demoThumbnail = [
@@ -30,20 +31,41 @@ const AddSongModal = ({ isOpen, setIsOpen, updateSong, dispatch }) => {
   };
 
   const handleDone = () => {
-    const songData = {
-      ...formData,
-      duration: parseInt(formData.duration * 60),
-      thumbnail:
-        demoThumbnail[Math.floor(Math.random() * demoThumbnail.length)],
-    };
+    if (formData?.title.length > 2) {
+      const songData = {
+        ...formData,
+        artist: formData.artist ? formData.artist : "Unknown",
+        year: formData?.year ? formData.year : "Unknown",
+        album: formData.album ? formData.album : "Unknown",
+        duration: parseInt(
+          formData.duration ? formData.duration * 60 : "00:00"
+        ),
+        thumbnail:
+          demoThumbnail[Math.floor(Math.random() * demoThumbnail.length)],
+      };
 
-    console.log(songData);
+      console.log(songData);
 
-    dispatch({
-      type: "ADD_SONG",
-      payload: { ...songData },
-    });
-    setIsOpen(false);
+      dispatch({
+        type: "ADD_SONG",
+        payload: { ...songData },
+      });
+
+      toast.success("Song added successfully");
+      setIsOpen(false);
+
+      setFormData({
+        title: "",
+        album: "",
+        artist: "",
+        country: "",
+        duration: "",
+        year: "",
+        thumbnail: "",
+      });
+    } else {
+      toast.error("Please add Title");
+    }
   };
 
   return (
@@ -55,7 +77,7 @@ const AddSongModal = ({ isOpen, setIsOpen, updateSong, dispatch }) => {
               <p>Add Song</p>
               <RxCross1
                 size={20}
-                onClick={() => setIsOpen(false)}
+                onClick={() => setIsOpen((prev) => !prev)}
                 className="cursor-pointer"
               />
             </div>
