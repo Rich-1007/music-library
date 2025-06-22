@@ -5,7 +5,7 @@ import AddSongModal from "../components/AddSongModal";
 import { songListReducer } from "../reducers/songListReducer";
 
 const Library = () => {
-    const [updateSong, dispatch] = useReducer(songListReducer, songs);
+  const [updateSong, dispatch] = useReducer(songListReducer, songs);
 
   const [userRole, setUserRole] = useState("admin");
 
@@ -150,7 +150,7 @@ const Library = () => {
     setAllSongs(songs);
   }, []);
 
-   useEffect(() => {
+  useEffect(() => {
     setAllSongs(updateSong);
   }, [updateSong]);
 
@@ -187,40 +187,18 @@ const Library = () => {
     setUserRole(user?.role ?? "admin");
   }, []);
 
-
-   function removeSong(title) {
+  function removeSong(title) {
     dispatch({
       type: "REMOVE_SONG",
-      payload: { title }
+      payload: { title },
     });
-
   }
 
   return (
     <>
       <div className="bg-[linear-gradient(190deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)] flex flex-col w-full min-h-screen items-center">
-        <div className="pb-7 border-b border-gray-500 flex flex-wrap gap-3 md:gap-5 justify-between md:items-center md:justify-end bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)] shadow-md w-full md:w-4/6 px-4 md:px-5 py-3">
-          {userRole == "admin" ? (
-            <div>
-              <button
-                onClick={handleAddSong}
-                className="text-xs bg-blue-700 text-white px-3 py-2 rounded hover:bg-blue-800 transition h-fit cursor-pointer"
-              >
-                Add Song
-              </button>
-            </div>
-          ) : null}
-
-          <AddSongModal dispatch={dispatch} updateSong={updateSong} isOpen={isOpen} setIsOpen={setIsOpen}/>
-
-          <button
-            onClick={handleClearAll}
-            className="text-xs bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 transition h-fit cursor-pointer"
-          >
-            Clear All
-          </button>
-
-          <div>
+        <div className="space-y-3 sm:space-y-0 sm:pb-7 border-b border-gray-500 flex flex-wrap gap-1 sm:gap-3 md:gap-5 justify-between md:items-center md:justify-end bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)] shadow-md w-full md:w-4/6 px-4 md:px-5 py-3">
+          <div className="">
             <label className="pr-2 text-sm text-gray-300 font-medium">
               Sort By
             </label>
@@ -241,7 +219,7 @@ const Library = () => {
             </select>
           </div>
 
-          <div>
+          <div className="">
             <label className="text-sm pr-2 text-gray-300 font-medium">
               Group By
             </label>
@@ -304,14 +282,38 @@ const Library = () => {
               )}
             </div>
           </div>
+          <button
+            onClick={handleClearAll}
+            className="text-xs bg-red-600 text-white px-3 py-2 rounded hover:bg-red-700 transition h-fit cursor-pointer"
+          >
+            Clear All
+          </button>
+
+          {userRole == "admin" ? (
+            <div>
+              <button
+                onClick={handleAddSong}
+                className="text-xs bg-blue-700 text-white px-3 py-2 rounded hover:bg-blue-800 transition h-fit cursor-pointer"
+              >
+                Add Song
+              </button>
+            </div>
+          ) : null}
+
+          <AddSongModal
+            dispatch={dispatch}
+            updateSong={updateSong}
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
+          />
         </div>
 
         {groupField ? (
-          <div className="w-4/6 bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  px-7 py-3">
+          <div className="sm:w-4/6 bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  sm:px-7 px-2 py-3">
             <span className="text-[#fff] font-bold">
               Grouped By {groupField}
             </span>
-            <div className="w-full bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  px-7">
+            <div className="w-full bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  sm:px-7">
               <div>
                 {groupByData &&
                   Object.entries(groupByData)?.map(([albumName, songs]) => (
@@ -425,7 +427,10 @@ const Library = () => {
                           {durationConverter(item.duration)}
                         </td>
                         {userRole == "admin" ? (
-                          <td className="p-2 " onClick={() => removeSong(item.title)}>
+                          <td
+                            className="p-2 "
+                            onClick={() => removeSong(item.title)}
+                          >
                             <MdDeleteForever size={28} />
                           </td>
                         ) : null}
