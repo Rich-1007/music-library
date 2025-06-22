@@ -16,7 +16,7 @@ const Library = () => {
   const [allSongs, setAllSongs] = useState();
   const [groupByData, setGroupByData] = useState();
   const [allCheckBox, setAllCheckBox] = useState();
-  const [isTrue, setIsTrue] = useState();
+  const [isTrue, setIsTrue] = useState(false);
 
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [checkedItems, setCheckedItems] = useState({});
@@ -237,9 +237,9 @@ const Library = () => {
             </select>
           </div>
 
-          <div className="relative">
-            <div className="bg-[#2a2a2a] p-[0.53rem] rounded-md border border-gray-600 md:w-60 sm:w-64">
-              <div className="flex justify-between items-center">
+          <div className="">
+            <div className="relative bg-[#2a2a2a] py-[0.53rem] rounded-md border border-gray-600 md:w-60 sm:w-64 ">
+              <div className="flex px-2 justify-between items-center">
                 <div
                   className="flex items-center gap-2 cursor-pointer w-full"
                   onClick={() => setIsTrue((prev) => !prev)}
@@ -262,7 +262,7 @@ const Library = () => {
               </div>
 
               {isTrue && (
-                <div className="mt-3 space-y-2 max-h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
+                <div className="absolute px-3 top-12 py-3  md:w-60 sm:w-64  bg-[#2a2a2a]  rounded-md border border-gray-600 mt-0 space-y-2 max-h-72 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-700">
                   {allCheckBox?.map((item) => (
                     <div key={item} className="flex items-center gap-2">
                       <input
@@ -363,9 +363,9 @@ const Library = () => {
             </div>
           </div>
         ) : (
-          <div className="md:w-4/6 bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  md:px-7 py-3">
-            <table className="w-full text-left text-sm text-gray-300 border-collapse">
-              <thead className="border-b border-gray-500 text-gray-400">
+          <div className="w-screen md:w-4/6 bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)]  md:px-7 py-3">
+            <table className="   w-full text-left text-sm text-gray-300 border-collapse">
+              <thead className="border-b border-gray-500 text-gray-400 text-[10px] sm:text-lg">
                 <tr>
                   <th className="p-2">#</th>
                   <th className="p-2">Image</th>
@@ -373,10 +373,12 @@ const Library = () => {
                   <th className="p-2">Artist</th>
                   <th className="p-2">Duration</th>
 
-                  {userRole == "admin" ? <th className="p-2">Remove</th> : null}
+                  {userRole == "admin" && filteredItems?.length == 0 ? (
+                    <th className="p-2">Remove</th>
+                  ) : null}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="">
                 {filteredItems?.length > 0
                   ? filteredItems.map((item, index) => (
                       <tr
@@ -406,7 +408,7 @@ const Library = () => {
                   : allSongs?.map((item, index) => (
                       <tr
                         key={index}
-                        className="border-t border-[#302C2F] hover:bg-[#302C2F] cursor-pointer"
+                        className="border-t border-[#302C2F] hover:bg-[#302C2F] cursor-pointer "
                       >
                         <td className="p-2">{index + 1}</td>
                         <td className="p-2">

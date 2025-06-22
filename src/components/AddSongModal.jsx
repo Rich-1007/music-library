@@ -1,9 +1,7 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 
-
-
-const AddSongModal = ({isOpen, setIsOpen ,updateSong, dispatch}) => {
+const AddSongModal = ({ isOpen, setIsOpen, updateSong, dispatch }) => {
   const demoThumbnail = [
     "https://c.saavncdn.com/358/Sad-Lofi-Hindi-2024-20240206233149-500x500.jpg",
     "https://c.saavncdn.com/033/Iktara-Lofi-Flip--Hindi-2021-20210630194407-500x500.jpg",
@@ -43,12 +41,10 @@ const AddSongModal = ({isOpen, setIsOpen ,updateSong, dispatch}) => {
 
     dispatch({
       type: "ADD_SONG",
-      payload: {...songData
-      },
+      payload: { ...songData },
     });
+    setIsOpen(false);
   };
-
- 
 
   return (
     <>
@@ -59,7 +55,7 @@ const AddSongModal = ({isOpen, setIsOpen ,updateSong, dispatch}) => {
               <p>Add Song</p>
               <RxCross1
                 size={20}
-                onClick={() => setIsOpen((prev) => !prev)}
+                onClick={() => setIsOpen(false)}
                 className="cursor-pointer"
               />
             </div>
