@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { songs } from "../data/data";
-import NavBar from "../components/NavBar";
 import { MdDeleteForever } from "react-icons/md";
 import AddSongModal from "../components/AddSongModal";
+import { songListReducer } from "../reducers/songListReducer";
 
 const Library = () => {
+    const [updateSong, dispatch] = useReducer(songListReducer, songs);
+
   const [userRole, setUserRole] = useState("admin");
 
   const [groupByValue, setGroupByValue] = useState("");
@@ -148,6 +150,10 @@ const Library = () => {
     setAllSongs(songs);
   }, []);
 
+   useEffect(() => {
+    setAllSongs(updateSong);
+  }, [updateSong]);
+
   useEffect(() => {
     const artists = [...new Set(allSongs?.map((song) => song.artist))];
     const years = [...new Set(allSongs?.map((song) => song.year))];
@@ -175,9 +181,23 @@ const Library = () => {
     setIsOpen((prev) => !prev);
   }
 
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    console.log("currentuser: ", user);
+    setUserRole(user?.role ?? "admin");
+  }, []);
+
+
+   function removeSong(title) {
+    dispatch({
+      type: "REMOVE_SONG",
+      payload: { title }
+    });
+
+  }
+
   return (
     <>
-      <NavBar />
       <div className="bg-[linear-gradient(190deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)] flex flex-col w-full min-h-screen items-center">
         <div className="pb-7 border-b border-gray-500 flex flex-wrap gap-3 md:gap-5 justify-between md:items-center md:justify-end bg-[linear-gradient(270deg,_rgba(13,14,16,1)_19%,_rgba(79,35,40,1)_100%)] shadow-md w-full md:w-4/6 px-4 md:px-5 py-3">
           {userRole == "admin" ? (
@@ -191,7 +211,7 @@ const Library = () => {
             </div>
           ) : null}
 
-          <AddSongModal isOpen={isOpen} setIsOpen={setIsOpen}/>
+          <AddSongModal dispatch={dispatch} updateSong={updateSong} isOpen={isOpen} setIsOpen={setIsOpen}/>
 
           <button
             onClick={handleClearAll}
@@ -405,7 +425,7 @@ const Library = () => {
                           {durationConverter(item.duration)}
                         </td>
                         {userRole == "admin" ? (
-                          <td className="p-2 ">
+                          <td className="p-2 " onClick={() => removeSong(item.title)}>
                             <MdDeleteForever size={28} />
                           </td>
                         ) : null}

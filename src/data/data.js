@@ -104,7 +104,7 @@ export const songs = [
     country: "United Kingdom",
     duration: 258,
     year: 2014,
-    thumbnail: "https://c.saavncdn.com/835/x-English-2014-500x500.jpg",
+    thumbnail: "https://c.saavncdn.com/810/Neural-Network-Unknown-2023-20230707050039-500x500.jpg",
   },
   {
     title: "Love Dose",

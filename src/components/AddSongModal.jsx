@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import { useReducer } from "react";
 
 
 
-const AddSongModal = ({ isOpen, setIsOpen }) => {
+const AddSongModal = ({isOpen, setIsOpen ,updateSong, dispatch}) => {
   const demoThumbnail = [
     "https://c.saavncdn.com/358/Sad-Lofi-Hindi-2024-20240206233149-500x500.jpg",
     "https://c.saavncdn.com/033/Iktara-Lofi-Flip--Hindi-2021-20210630194407-500x500.jpg",
@@ -36,15 +35,20 @@ const AddSongModal = ({ isOpen, setIsOpen }) => {
     const songData = {
       ...formData,
       duration: parseInt(formData.duration * 60),
-      thumbnail: demoThumbnail[Math.floor(Math.random() * 10)],
+      thumbnail:
+        demoThumbnail[Math.floor(Math.random() * demoThumbnail.length)],
     };
 
     console.log(songData);
+
+    dispatch({
+      type: "ADD_SONG",
+      payload: {...songData
+      },
+    });
   };
 
-  //   useState(() => {
-  //     console.log("handleChange------------->");
-  //   }, [formData]);
+ 
 
   return (
     <>
